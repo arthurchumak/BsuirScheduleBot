@@ -6,7 +6,13 @@ axios.defaults.baseURL = 'http://www.bsuir.by/schedule/rest';
 
 const TOKEN = process.env.TOKEN || null;
 
-var bot = new TelegramBot(TOKEN, {polling: true});
+var bot = new TelegramBot(TOKEN, {
+        polling: true,
+        webHook: {
+            port: process.env.PORT || 5000,
+            host: process.env.HOST
+        }
+    });
 
 global.store = {};
 
