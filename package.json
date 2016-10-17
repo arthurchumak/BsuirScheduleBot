@@ -1,0 +1,14 @@
+{
+  "name": "bsuir-schedule-bot",
+  "version": "0.0.1",
+  "engines": {
+    "node": "6.7.x"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Arthur Chumak",
+  "license": "ISC"
+}
