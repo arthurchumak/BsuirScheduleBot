@@ -1,6 +1,6 @@
 {
   "name": "bsuir-schedule-bot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "node": "6.7.x"
   },
@@ -10,5 +10,10 @@
     "start": "node index.js"
   },
   "author": "Arthur Chumak",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.15.1",
+    "node-telegram-bot-api": "^0.24.0",
+    "pixl-xml": "^1.0.9"
+  }
 }
