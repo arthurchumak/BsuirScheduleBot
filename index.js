@@ -48,34 +48,19 @@ function getDay(date = new Date()){
 
 bot.onText(/\/start/, function (msg) {
     var chatId = msg.chat.id,
-        message = "Для получения рассписания на сегодня воспользуйтесь командой /g353502 заменив номер группы на свой.";
+        message = "Для получения рассписания на сегодня воспользуйтесь командой /today353502 заменив номер группы на свой.\n Рассписание на неделю можно получить так /week353502";
     bot.sendMessage(chatId, message);
 });
-    
-bot.onText(/\/g(.+)/, function (msg, match) {
-    console.log(match);
-    
-    var chatId = msg.chat.id;
-        
-    try{
-        var group_id = getGroupId(match[1]);
-        if (group_id == null) {
-            throw new Error('No such group');
-        }
-    }
-    catch(error){
-        console.log(error);
-        bot.sendMessage(chatId, 'Ошибочка :)');
-        return;
-    }
-    
+
+function sendScheduleForDate(chatId, group_id, day) {
+
     axios.get('/schedule/' + group_id)
     .then(function (response) {
         var days = xml.parse(response.data).scheduleModel,
-            today = getDay(),
+            tab = '        ',
             week = getWeek(),
-            message = today + '\n',
-            tab = '        ';
+            today = day || getDay(),
+            message = today + '\n';
             
         var lessons = days.find(function(day){
             return (day.weekDay === today) ? true : false;
@@ -96,5 +81,45 @@ bot.onText(/\/g(.+)/, function (msg, match) {
         message += tab + "Выходной"
         bot.sendMessage(chatId, message);
     });
+}
+
+bot.onText(/\/today(.+)/, function (msg, match) {
+    console.log(match);
     
+    var chatId = msg.chat.id;
+        
+    try{
+        var group_id = getGroupId(match[1]);
+        if (group_id == null) {
+            throw new Error('No such group');
+        }
+        sendScheduleForDate(chatId, group_id);
+    }
+    catch(error){
+        console.log(error);
+        bot.sendMessage(chatId, 'Ошибочка :)');
+        return;
+    }
+});
+
+bot.onText(/\/week(.+)/, function (msg, match) {
+    console.log(match);
+    
+    var chatId = msg.chat.id;
+        
+    try{
+        var group_id = getGroupId(match[1]);
+        if (group_id == null) {
+            throw new Error('No such group');
+        }
+        var days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+        for (day of days){
+            sendScheduleForDate(chatId, group_id, day);
+        }
+    }
+    catch(error){
+        console.log(error);
+        bot.sendMessage(chatId, 'Ошибочка :)');
+        return;
+    }
 });
